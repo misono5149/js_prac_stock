@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Running JavaScript</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <style> 
+      
+      table { 
+        width: 100%;
+        border: 1px solid grey;
+        border-collapse: collapse;
+        }
+        th, td {
+        border: 1px solid grey;
+        }
+        /*
+        기본 테이블이 되는 table의 border 색이랑 collapse(인접셀의 경계선이랑 합쳐서 보이게끔) 속성 넣기
+        th, td에도 각 경계가 되는 색을 입히기
+        */
+
+      </style>
+  </head>
+  <body>
+    <table style="width: 100%">
+      <thead>
+        <tr>
+            <th style="width: 7%">날짜</th>
+           <th style="width: 9%">KT&G</th>
+           <th style="width: 9%">LG전자</th>
+           <th style="width: 9%">NAVER</th>
+           <th style="width: 9%">POSCO</th>
+           <th style="width: 9%">넷마블</th>
+           <th style="width: 9%">삼성물산</th>
+           <th style="width: 9%">삼성화재</th>
+           <th style="width: 10%">아모레퍼시픽</th>
+           <th style="width: 10%">엔씨소프트</th>
+           <th style="width: 9%">현대차</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+      </tbody>
+    </table>
+
+    <script src="utils.js"></script>
+    <script src="csvdata.js"></script>
+    <script>
+    var selNames = ['KT&G', 'LG전자', 'NAVER', 'POSCO','넷마블','삼성물산',
+                    '삼성화재','아모레퍼시픽','엔씨소프트','현대차']
+    var csv = getCsvData();
+    console.log(csv);
+    json = csv2json(csv);
+    console.log(json[0]);
+    sel = filterNameAndComma(json, "name", selNames)
+    console.log(sel[0]);
+    console.log(sel[1]);
+    console.log(sel[2]);
+    console.log(sel[3]);
+    console.log(sel[4]);
+    console.log(sel[5]);
+    console.log(sel[6]);
+    console.log(sel[7]);
+    console.log(sel[8]);
+    console.log(sel[9]);
+    rows = groupByDate(sel);
+    console.log(rows);
+
+    for (var i=0;i<rows.length;i++) {
+        var da  = rows[i]["date"];
+        var cols = rows[i]["cols"];
+        console.log(da);
+        console.log(cols);
+        
+        console.log(cols.length);
+        var tabrow = "<tr>" + ((i%2===0) //맨 상단 selName 표시하는 줄 부터 첫째 줄이라고 치고 짝수 줄 배경색 입히기(날짜셀)
+             ? '<td style="width: 7% border:1px solid #444444;  background-color:lightgrey">' + da + "</td>"
+             :  '<td style="width: 7% border:1px solid #444444;">' + da + "</td>")
+        console.log(i);
+        for (var j=0;j<cols.length;j++) {
+        console.log(i);
+          tabrow = tabrow + ((i%2===0) //맨 상단 selName 표시하는 줄 부터 첫째 줄이라고 치고 짝수 줄 배경색 입히기(각 price셀)
+          ?'<td style="width:9.5%; text-align:center; background-color:lightgrey">' + cols[j]['price'] + "</td>"
+          : '<td style="width:9.5%; text-align:center;">' + cols[j]['price'] + "</td>"
+          )
+        }
+        tabrow += "</tr>";
+        console.log(tabrow)
+        $('#tbody').append(tabrow);
+        
+    }
+    </script>
+        
+    </body>
+</html>
